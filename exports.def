@@ -1,0 +1,4 @@
+LIBRARY	"BaseObjectSwapper"
+EXPORTS
+NVSEPlugin_Query
+NVSEPlugin_Load
