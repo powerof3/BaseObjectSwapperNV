@@ -3,8 +3,7 @@
 #include <variant>
 #include <string>
 #include <ranges>
-#include <unordered_set>
-#include <unordered_map>
+#include <set>
 
 #include "GameObjects.h"
 #include "GameData.h"
@@ -21,22 +20,41 @@
 #include "lib/simpleINI.hpp"
 
 #include "srell.hpp"
+#include <boost/unordered/unordered_flat_map.hpp>
+#include <boost/unordered/unordered_flat_set.hpp>
 
-namespace string = clib_util::string;
-namespace dist = clib_util::distribution;
-namespace numeric = clib_util::numeric;
+using namespace std::literals;
 
+using namespace clib_util;
 using SeedRNG = clib_util::RNG;
 
-template <class T>
-using MinMax = std::pair<T, T>;
-template <class T>
-using RelData = std::pair<bool, MinMax<T>>;  //relative vs absolute
+// for visting variants
+template <class... Ts>
+struct overload : Ts...
+{
+	using Ts::operator()...;
+};
 
-using FormIDStr = std::variant<std::uint32_t, std::string>;
+using FormIDStr = std::variant<RE::FormID, std::string>;
 
-using FormIDSet = std::unordered_set<std::uint32_t>;
-using FormIDOrSet = std::variant<std::uint32_t, FormIDSet>;
+template <class K, class D>
+using FlatMap = boost::unordered_flat_map<K, D>;
+template <class T>
+using FlatSet = boost::unordered_flat_set<T>;
+template <class T>
+using OrderedSet = std::set<T>;
+
+using FormIDSet = FlatSet<RE::FormID>;
+using FormIDOrSet = std::variant<RE::FormID, FormIDSet>;
+using FormIDOrderedSet = OrderedSet<RE::FormID>;
 
 template <class T>
-using SwapMap = std::unordered_map<std::uint32_t, T>;
+using FormIDMap = FlatMap<RE::FormID, T>;
+
+namespace RE
+{
+	constexpr float NI_INFINITY = FLT_MAX;
+	constexpr float NI_PI = static_cast<float>(3.1415926535897932);
+	constexpr float NI_HALF_PI = 0.5F * NI_PI;
+	constexpr float NI_TWO_PI = 2.0F * NI_PI;
+}

@@ -9,16 +9,17 @@ namespace BaseObjectSwapper
 		static void __fastcall thunk(TESObjectREFR* a_ref, void* edx)
 		{
 			if (const auto base = a_ref->baseForm) {
-				Manager::GetSingleton()->LoadFormsOnce();
+				FormSwap::Manager::GetSingleton()->LoadFormsOnce();
 
-				const auto& [swapBase, transformData] = Manager::GetSingleton()->GetSwapData(a_ref, base);
+				const auto& [swapBase, objectProperties] = FormSwap::Manager::GetSingleton()->GetSwapData(a_ref, base);
 
 				if (swapBase && swapBase != base) {
 					a_ref->InitBaseForm(swapBase);
 				}
 
-				if (transformData) {
-					transformData->SetTransform(a_ref);
+				if (objectProperties) {
+					objectProperties->SetTransform(a_ref);
+					objectProperties->SetRecordFlags(a_ref);
 				}
 			}
 

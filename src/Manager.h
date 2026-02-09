@@ -2,28 +2,8 @@
 
 #include "SwapData.h"
 
-namespace BaseObjectSwapper
+namespace FormSwap
 {
-	inline Script* HasKeywordScript;
-	[[nodiscard]] bool HasKeyword(TESForm* a_form, const std::string& a_keyword);
-
-	struct ConditionalInput
-	{
-		ConditionalInput(TESObjectREFR* a_ref, TESForm* a_form) :
-			ref(a_ref),
-			base(a_form),
-			currentCell(a_ref->GetParentCell())
-		{
-		}
-
-		[[nodiscard]] bool IsValid(const FormIDStr& a_data) const;
-
-		// members
-		TESObjectREFR* ref;
-		TESForm* base;
-		TESObjectCELL* currentCell;
-	};
-
 	class Manager
 	{
 	public:
@@ -32,43 +12,40 @@ namespace BaseObjectSwapper
 			static Manager singleton;
 			return std::addressof(singleton);
 		}
-
+		
 		void LoadFormsOnce();
 
-		void            PrintConflicts() const;
-		SwapResult      GetSwapData(TESObjectREFR* a_ref, TESForm* a_base);
-		SwapResult      GetSwapConditionalBase(TESObjectREFR* a_ref, TESForm* a_base);
-		TransformResult GetTransformConditional(TESObjectREFR* a_ref, TESForm* a_base);
+		void PrintConflicts() const;
+
+		SwapFormResult                  GetSwapData(TESObjectREFR* a_ref, TESForm* a_base);
+		SwapFormResult                  GetSwapFormConditional(TESObjectREFR* a_ref, TESForm* a_base);
+		std::optional<ObjectProperties> GetObjectPropertiesConditional(TESObjectREFR* a_ref, TESForm* a_base);
 
 		void InsertLeveledItemRef(const TESObjectREFR* a_refr);
 		bool IsLeveledItemRefSwapped(const TESObjectREFR* a_refr) const;
 
-	private:
+	protected:
 		Manager() = default;
 		~Manager() = default;
 
 		Manager(const Manager&) = delete;
 		Manager(Manager&&) = delete;
+
 		Manager& operator=(const Manager&) = delete;
 		Manager& operator=(Manager&&) = delete;
 
+	private:
 		void LoadForms();
 
-		SwapMap<SwapDataVec>& get_form_map(const std::string& a_str);
-		static void           get_forms(const std::string& a_path, const std::string& a_str, SwapMap<SwapDataVec>& a_map);
-		void                  get_forms(const std::string& a_path, const std::string& a_str, const std::vector<FormIDStr>& a_conditionalIDs);
-		void                  get_transforms(const std::string& a_path, const std::string& a_str);
-		void                  get_transforms(const std::string& a_path, const std::string& a_str, const std::vector<FormIDStr>& a_conditionalIDs);
-
 		// members
-		SwapMap<SwapDataVec>         swapForms{};
-		SwapMap<SwapDataVec>         swapRefs{};
-		SwapMap<SwapDataConditional> swapFormsConditional{};
+		FormIDMap<SwapFormDataVec>         swapRefs{};
+		FormIDMap<SwapFormDataConditional> swapFormsConditional{};
+		FormIDMap<SwapFormDataVec>         swapForms{};
 
-		SwapMap<TransformDataVec>         transforms{};
-		SwapMap<TransformDataConditional> transformsConditional{};
+		FormIDMap<ObjectDataVec>         refProperties{};
+		FormIDMap<ObjectDataConditional> refPropertiesConditional{};
 
-		std::unordered_set<std::uint32_t> swappedLeveledItemRefs{};
+		FlatSet<RE::FormID> swappedLeveledItemRefs{};
 
 		bool           hasConflicts{ false };
 		std::once_flag init{};

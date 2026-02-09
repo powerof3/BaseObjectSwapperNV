@@ -2,10 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="dllmain.c" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="src\Hooks.cpp" />
-    <ClCompile Include="src\Manager.cpp" />
-    <ClCompile Include="src\SwapData.cpp" />
     <ClCompile Include="..\nvse\nvse\containers.cpp">
       <Filter>nvse</Filter>
     </ClCompile>
@@ -63,14 +59,32 @@
     <ClCompile Include="..\nvse\nvse\Utilities.cpp">
       <Filter>nvse</Filter>
     </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\ConditionalData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Hooks.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Manager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ObjectProperties.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\RNG.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\SwapData.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Util.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fn_intro_to_script_functions.h" />
     <ClInclude Include="fn_typed_functions.h" />
-    <ClInclude Include="src\Defs.h" />
-    <ClInclude Include="src\Hooks.h" />
-    <ClInclude Include="src\Manager.h" />
-    <ClInclude Include="src\SwapData.h" />
     <ClInclude Include="..\nvse\nvse\CommandTable.h">
       <Filter>nvse</Filter>
     </ClInclude>
@@ -137,6 +151,9 @@
     <ClInclude Include="..\nvse\nvse\Utilities.h">
       <Filter>nvse</Filter>
     </ClInclude>
+    <ClInclude Include="lib\bitmasks.hpp">
+      <Filter>lib</Filter>
+    </ClInclude>
     <ClInclude Include="lib\distribution.hpp">
       <Filter>lib</Filter>
     </ClInclude>
@@ -146,14 +163,47 @@
     <ClInclude Include="lib\numeric.hpp">
       <Filter>lib</Filter>
     </ClInclude>
+    <ClInclude Include="lib\rng.hpp">
+      <Filter>lib</Filter>
+    </ClInclude>
     <ClInclude Include="lib\simpleINI.hpp">
       <Filter>lib</Filter>
     </ClInclude>
     <ClInclude Include="lib\string.hpp">
       <Filter>lib</Filter>
     </ClInclude>
-    <ClInclude Include="lib\rng.hpp">
+    <ClInclude Include="lib\timer.hpp">
       <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\detail\SimpleIni.h">
+      <Filter>lib\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\detail\XoshiroCpp.hpp">
+      <Filter>lib\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Defs.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ConditionalData.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Hooks.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Manager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ObjectProperties.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\RNG.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\SwapData.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Util.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +215,12 @@
     </Filter>
     <Filter Include="lib">
       <UniqueIdentifier>{906cd381-9527-47ec-b1fb-752391f4b0a5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{fbdf17c5-83bd-4e23-b718-f883e6a40524}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lib\detail">
+      <UniqueIdentifier>{3a330474-98ec-4373-9fa7-2f0fb0f793b0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

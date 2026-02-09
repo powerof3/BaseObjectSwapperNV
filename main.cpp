@@ -60,6 +60,8 @@ void MessageHandler(NVSEMessagingInterface::Message* msg)
 
 bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info)
 {
+	_MESSAGE("Querying Base Object Swapper...");
+	
 	// fill out the info structure
 	info->infoVersion = PluginInfo::kInfoVersion;
 	info->name = "BaseObjectSwapper";
@@ -102,6 +104,8 @@ bool NVSEPlugin_Query(const NVSEInterface* nvse, PluginInfo* info)
 
 bool NVSEPlugin_Load(NVSEInterface* nvse)
 {
+	_MESSAGE("Loading Base Object Swapper...");
+	
 	g_pluginHandle = nvse->GetPluginHandle();
 
 	// save the NVSE interface in case we need it later
