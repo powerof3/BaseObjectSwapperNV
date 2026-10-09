@@ -2,6 +2,30 @@
 
 extern NVSEScriptInterface* g_script;
 
+class TESFile {
+public:
+	std::uint32_t	padding[0xFA];
+	Bitfield32		flags;
+	std::uint32_t	padding2[0x8];
+	std::uint8_t	modIndex;
+	std::uint16_t	secondModIndex;
+
+	bool IsSmall() const { return flags.Get(0x100); }
+	bool IsMedium() const { return flags.Get(0x400); }
+	bool IsSpecial() const { return flags.Get(0x700); }
+};
+
+class TESDataHandler {
+public:
+	Bitfield8								flags;
+
+	static TESDataHandler* GetSingleton() { return *reinterpret_cast<TESDataHandler**>(0x11C3F2C); }
+
+	bool SupportsNewFileTypes() const { return flags.Get(0x80); }
+
+	TESFile* GetListFile(const char* fileName) const { return ThisStdCall<TESFile*>(0x462F40, this, fileName); }
+};
+
 namespace util
 {
 	std::vector<std::string> split_with_regex(const std::string& a_str, const srell::regex& a_regex)
@@ -18,8 +42,22 @@ namespace util
 	{
 		constexpr auto lookup_formID = [](std::uint32_t a_refID, const std::string& modName) -> std::uint32_t
 			{
-				const auto modIdx = DataHandler::Get()->GetModIndex(modName.c_str());
-				return modIdx == 0xFF ? 0 : (a_refID & 0xFFFFFF) | modIdx << 24;
+				const auto mod = TESDataHandler::GetSingleton()->GetListFile(modName.c_str());
+				if (mod) {
+					if (TESDataHandler::GetSingleton()->SupportsNewFileTypes() && mod->IsSpecial()) {
+						if (mod->IsSmall()) {
+							return (a_refID & 0xFFF) | mod->modIndex << 24 | mod->secondModIndex << 12;
+						}
+						else if (mod->IsMedium()) {
+							return (a_refID & 0xFFFF) | mod->modIndex << 24 | mod->secondModIndex << 16;
+						}
+					}
+					
+					return (a_refID & 0xFFFFFF) | mod->modIndex << 24;
+				}
+				else {
+					return 0;
+				}
 			};
 
 		if (const auto splitID = string::split(a_str, "~"); splitID.size() == 2) {
